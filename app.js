@@ -336,7 +336,7 @@ function openSettingsModal() {
     form.elements.apiBaseUrl.value = settings.apiBaseUrl || '';
     form.elements.apiKey.value = settings.apiKey || '';
     form.elements.deployment.value = settings.deployment || '';
-    form.elements.apiVersion.value = settings.apiVersion || '2024-02-15-preview';
+    form.elements.apiVersion.value = settings.apiVersion || '';
     
     modal.classList.add('show');
     form.elements.apiBaseUrl.focus();

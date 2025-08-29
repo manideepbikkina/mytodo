@@ -57,7 +57,7 @@
                     <div class="form-group">
                         <label for="api-base-url">Azure OpenAI Full URL:</label>
                         <input type="url" id="api-base-url" name="apiBaseUrl" 
-                               placeholder="https://manimodels.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2024-02-15-preview" required>
+                               placeholder="Eg: https://yourname.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2024-02-15-preview" required>
                         <small><strong>Tip:</strong> Paste the complete URL from Azure Foundry or AI Studio. The app will automatically extract the deployment name and API version.</small>
                     </div>
                     
@@ -65,7 +65,7 @@
                         <label for="api-key">API Key:</label>
                         <div class="password-input">
                             <input type="password" id="api-key" name="apiKey" 
-                                   placeholder="Enter your API key" required>
+                                   placeholder="Eg: 1234567890abcdef..." required>
                             <button type="button" class="toggle-password" id="toggle-password">
                                 <span class="eye-icon">👁</span>
                             </button>
@@ -76,14 +76,14 @@
                     <div class="form-group">
                         <label for="deployment">Deployment Name (Optional):</label>
                         <input type="text" id="deployment" name="deployment" 
-                               placeholder="gpt-4o-mini">
+                               placeholder="Eg: gpt-4o-mini">
                         <small>Leave blank to auto-extract from the URL above, or override with a specific deployment name</small>
                     </div>
                     
                     <div class="form-group">
                         <label for="api-version">API Version (Optional):</label>
                         <input type="text" id="api-version" name="apiVersion" 
-                               placeholder="2024-02-15-preview">
+                               placeholder="Eg: 2024-02-15-preview">
                         <small>Leave blank to auto-extract from the URL above, or override with a specific API version</small>
                     </div>
                     
