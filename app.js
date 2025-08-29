@@ -369,7 +369,7 @@ async function saveSettings(e) {
     
     const form = e.target;
     const formData = new FormData(form);
-    const settings = {
+    let settings = {
         apiBaseUrl: formData.get('apiBaseUrl').trim(),
         apiKey: formData.get('apiKey').trim(),
         deployment: formData.get('deployment').trim(),
@@ -377,8 +377,32 @@ async function saveSettings(e) {
     };
     
     // Validate required fields
-    if (!settings.apiBaseUrl || !settings.apiKey || !settings.deployment || !settings.apiVersion) {
-        showConnectionStatus('All fields are required.', 'error');
+    if (!settings.apiBaseUrl || !settings.apiKey) {
+        showConnectionStatus('API Base URL and API Key are required.', 'error');
+        return;
+    }
+    
+    // Try to extract deployment and API version from URL if not provided
+    if (!settings.deployment || !settings.apiVersion) {
+        try {
+            const parsed = AI.parseAzureOpenAIUrl(settings.apiBaseUrl);
+            if (!settings.deployment && parsed.deployment) {
+                settings.deployment = parsed.deployment;
+            }
+            if (!settings.apiVersion && parsed.apiVersion) {
+                settings.apiVersion = parsed.apiVersion;
+            }
+            if (parsed.isFullUrl && parsed.baseUrl) {
+                settings.apiBaseUrl = parsed.baseUrl;
+            }
+        } catch (error) {
+            console.error('Error parsing URL:', error);
+        }
+    }
+    
+    // Final validation - now check if we have all required fields
+    if (!settings.deployment || !settings.apiVersion) {
+        showConnectionStatus('Could not extract deployment name or API version from URL. Please provide them manually.', 'error');
         return;
     }
     
@@ -402,7 +426,7 @@ async function saveSettings(e) {
 async function testConnection() {
     const form = document.getElementById('settings-form');
     const formData = new FormData(form);
-    const settings = {
+    let settings = {
         apiBaseUrl: formData.get('apiBaseUrl').trim(),
         apiKey: formData.get('apiKey').trim(),
         deployment: formData.get('deployment').trim(),
@@ -410,8 +434,32 @@ async function testConnection() {
     };
     
     // Validate required fields
-    if (!settings.apiBaseUrl || !settings.apiKey || !settings.deployment || !settings.apiVersion) {
-        showConnectionStatus('Please fill in all fields before testing.', 'error');
+    if (!settings.apiBaseUrl || !settings.apiKey) {
+        showConnectionStatus('API Base URL and API Key are required.', 'error');
+        return;
+    }
+    
+    // Try to extract deployment and API version from URL if not provided
+    if (!settings.deployment || !settings.apiVersion) {
+        try {
+            const parsed = AI.parseAzureOpenAIUrl(settings.apiBaseUrl);
+            if (!settings.deployment && parsed.deployment) {
+                settings.deployment = parsed.deployment;
+            }
+            if (!settings.apiVersion && parsed.apiVersion) {
+                settings.apiVersion = parsed.apiVersion;
+            }
+            if (parsed.isFullUrl && parsed.baseUrl) {
+                settings.apiBaseUrl = parsed.baseUrl;
+            }
+        } catch (error) {
+            console.error('Error parsing URL:', error);
+        }
+    }
+    
+    // Final validation
+    if (!settings.deployment || !settings.apiVersion) {
+        showConnectionStatus('Could not extract deployment name or API version from URL. Please provide them manually.', 'error');
         return;
     }
     
