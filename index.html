@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyToDo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-layout">
+        <div class="main-content">
+            <div class="container">
+                <header>
+                    <h1>My To Dos</h1>
+                </header>
+                
+                <main>
+                    <div class="add-task-section">
+                        <button id="add-task-btn" class="add-btn">Add a New Task</button>
+                    </div>
+                    
+                    <div id="tasks-container" class="tasks-container">
+                        <!-- Tasks will be dynamically added here -->
+                    </div>
+                    
+                    <div class="api-section">
+                        <button id="settings-btn" class="api-btn">
+                            <span class="gear-icon">⚙</span>
+                            Settings
+                        </button>
+                    </div>
+                </main>
+            </div>
+        </div>
+        
+        <!-- Resources Side Pane -->
+        <div id="resources-pane" class="resources-pane">
+            <div class="resources-header">
+                <h3>📚 Helpful Resources</h3>
+                <button id="close-resources" class="close-resources-btn">&times;</button>
+            </div>
+            <div id="resources-content" class="resources-content">
+                <p class="resources-placeholder">Click "Plan for Me" on any task to see helpful resources here.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>AI Settings</h2>
+                <button class="close-btn" id="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="settings-form">
+                    <div class="form-group">
+                        <label for="api-base-url">Azure OpenAI Full URL:</label>
+                        <input type="url" id="api-base-url" name="apiBaseUrl" 
+                               placeholder="https://manimodels.openai.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2024-02-15-preview" required>
+                        <small><strong>Tip:</strong> Paste the complete URL from Azure Foundry or AI Studio. The app will automatically extract the deployment name and API version.</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="api-key">API Key:</label>
+                        <div class="password-input">
+                            <input type="password" id="api-key" name="apiKey" 
+                                   placeholder="Enter your API key" required>
+                            <button type="button" class="toggle-password" id="toggle-password">
+                                <span class="eye-icon">👁</span>
+                            </button>
+                        </div>
+                        <small>Your Azure OpenAI API key from the Keys and Endpoint section</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="deployment">Deployment Name (Optional):</label>
+                        <input type="text" id="deployment" name="deployment" 
+                               placeholder="gpt-4o-mini">
+                        <small>Leave blank to auto-extract from the URL above, or override with a specific deployment name</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="api-version">API Version (Optional):</label>
+                        <input type="text" id="api-version" name="apiVersion" 
+                               placeholder="2024-02-15-preview">
+                        <small>Leave blank to auto-extract from the URL above, or override with a specific API version</small>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" id="test-connection" class="test-btn">Test Connection</button>
+                        <button type="submit" class="save-btn">Save Settings</button>
+                    </div>
+                    
+                    <div id="connection-status" class="connection-status"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="storage.js"></script>
+    <script src="ai.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

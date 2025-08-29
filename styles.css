@@ -1,0 +1,957 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #2d3748;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    font-size: 16px;
+}
+
+/* App Layout */
+.app-layout {
+    display: flex;
+    height: 100vh;
+}
+
+.main-content {
+    flex: 1;
+    overflow-y: auto;
+    transition: margin-right 0.3s ease;
+}
+
+.main-content.with-resources {
+    margin-right: 25%;
+}
+
+/* Resources Side Pane */
+.resources-pane {
+    width: 25%;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.resources-pane.open {
+    transform: translateX(0);
+}
+
+.resources-header {
+    padding: 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    background: rgba(248, 250, 252, 0.8);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.resources-header h3 {
+    margin: 0;
+    color: #333;
+    font-size: 1.2rem;
+}
+
+.close-resources-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.close-resources-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.resources-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.resources-placeholder {
+    color: #666;
+    font-style: italic;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.resource-section {
+    margin-bottom: 25px;
+}
+
+.resource-section h4 {
+    margin: 0 0 15px 0;
+    color: #007bff;
+    font-size: 1rem;
+    font-weight: 600;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 8px;
+}
+
+.resource-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.resource-item {
+    margin-bottom: 12px;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    transition: all 0.2s;
+}
+
+.resource-item:hover {
+    background-color: #f0f0f0;
+    border-color: #007bff;
+}
+
+.resource-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.resource-title {
+    font-weight: 600;
+    color: #007bff;
+    display: block;
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+.resource-url {
+    font-size: 11px;
+    color: #666;
+    word-break: break-all;
+    line-height: 1.3;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header h1 {
+    font-size: 2.8rem;
+    font-weight: 300;
+    margin-bottom: 30px;
+    color: rgba(255, 255, 255, 0.95);
+    text-align: center;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.add-task-section {
+    margin-bottom: 20px;
+}
+
+.add-btn {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 16px 24px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    width: 100%;
+    text-align: left;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.add-btn::before {
+    content: "➕ ";
+    margin-right: 8px;
+}
+
+.add-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.add-btn:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
+}
+
+.task-item {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    margin-bottom: 16px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.task-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.task-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-radius: 16px 16px 0 0;
+}
+
+.task-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #667eea;
+}
+
+.task-title {
+    flex: 1;
+    font-size: 18px;
+    font-weight: 500;
+    background: none;
+    border: none;
+    color: white;
+    outline: none;
+    letter-spacing: 0.3px;
+}
+
+.task-title:focus {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    padding: 4px 8px;
+}
+
+.task-title.completed {
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+.task-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.delete-btn {
+    background: none;
+    border: none;
+    color: #ccc;
+    padding: 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 300;
+    transition: all 0.2s ease;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.delete-btn:hover {
+    background: rgba(200, 200, 200, 0.2);
+    color: #999;
+}
+
+.subtasks-container {
+    padding: 0;
+    margin-left: 24px;
+    border-left: 3px solid rgba(102, 126, 234, 0.3);
+}
+
+.subtask-item {
+    background: rgba(248, 250, 252, 0.8);
+    backdrop-filter: blur(5px);
+    color: #2d3748;
+    padding: 14px 20px;
+    margin: 8px 16px 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    transition: all 0.2s ease;
+}
+
+.subtask-item:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateX(4px);
+    border-color: rgba(102, 126, 234, 0.4);
+}
+
+.subtask-item:last-child {
+    border-bottom: none;
+}
+
+.subtask-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #667eea;
+    flex-shrink: 0;
+    margin-right: 4px;
+}
+
+.subtask-title {
+    flex: 1;
+    font-size: 16px;
+    font-weight: 400;
+    background: none;
+    border: none;
+    color: #2d3748;
+    outline: none;
+    letter-spacing: 0.2px;
+}
+
+.subtask-title:focus {
+    background: rgba(102, 126, 234, 0.1);
+    border-radius: 6px;
+    padding: 4px 8px;
+}
+
+.subtask-title.completed {
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+.add-subtask-section {
+    background: rgba(248, 250, 252, 0.6);
+    backdrop-filter: blur(5px);
+    padding: 16px 24px;
+    margin: 8px 16px 16px 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-radius: 0 0 16px 16px;
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    border-top: none;
+}
+
+.add-subtask-btn {
+    background: rgba(102, 126, 234, 0.1);
+    border: 1px solid rgba(102, 126, 234, 0.3);
+    color: #667eea;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 14px;
+    flex: 1;
+    text-align: left;
+    padding: 10px 16px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.add-subtask-btn::before {
+    content: "➕ ";
+    margin-right: 6px;
+}
+
+.add-subtask-btn:hover {
+    background: rgba(102, 126, 234, 0.2);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+}
+
+.plan-for-me-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.plan-for-me-btn::before {
+    content: "🪄 ";
+    margin-right: 6px;
+}
+
+.plan-for-me-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.plan-for-me-btn.tooltip {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.plan-for-me-btn.tooltip::before {
+    content: "⚙️ ";
+    margin-right: 6px;
+}
+
+.plan-for-me-btn.tooltip:hover {
+    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+}
+
+.api-section {
+    margin-top: 30px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.api-btn {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 12px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.api-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.gear-icon {
+    font-size: 16px;
+}
+
+.editing {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    border-radius: 2px;
+    padding: 2px 4px !important;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+    
+    header h1 {
+        font-size: 2rem;
+    }
+    
+    .task-header {
+        padding: 10px 15px;
+    }
+    
+    .subtask-item,
+    .add-subtask-section {
+        padding: 8px 15px;
+    }
+}
+
+/* Focus styles for accessibility */
+button:focus,
+input:focus {
+    outline: 2px solid #4a90a4;
+    outline-offset: 2px;
+}
+
+/* Hide default checkbox styling and create custom */
+.task-checkbox,
+.subtask-checkbox {
+    appearance: none;
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    border-radius: 2px;
+    position: relative;
+}
+
+/* Override for subtask checkboxes to be visible on light background */
+.subtask-checkbox {
+    border: 2px solid #667eea;
+    background-color: white;
+}
+
+.task-checkbox:checked,
+.subtask-checkbox:checked {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: white;
+}
+
+/* Override for subtask checkboxes when checked */
+.subtask-checkbox:checked {
+    background-color: #667eea;
+    border-color: #667eea;
+}
+
+.task-checkbox:checked::after,
+.subtask-checkbox:checked::after {
+    content: '✓';
+    position: absolute;
+    top: -2px;
+    left: 2px;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.3s ease;
+}
+
+.modal.show {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s ease;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: #333;
+    font-size: 1.5rem;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.close-btn:hover {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #333;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #2c5f7a;
+}
+
+.form-group small {
+    display: block;
+    margin-top: 5px;
+    color: #666;
+    font-size: 12px;
+}
+
+.password-input {
+    position: relative;
+    display: flex;
+}
+
+.password-input input {
+    padding-right: 45px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 3px;
+    transition: background-color 0.2s;
+}
+
+.toggle-password:hover {
+    background-color: #f0f0f0;
+}
+
+.eye-icon {
+    font-size: 16px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.test-btn {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+    flex: 1;
+}
+
+.test-btn:hover {
+    background-color: #5a6268;
+}
+
+.test-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.save-btn {
+    background-color: #2c5f7a;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+    flex: 2;
+}
+
+.save-btn:hover {
+    background-color: #1e4a5e;
+}
+
+.connection-status {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 4px;
+    display: none;
+    white-space: pre-line;
+    font-family: monospace;
+    font-size: 12px;
+}
+
+.connection-status.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    display: block;
+}
+
+.connection-status.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    display: block;
+}
+
+.plan-for-me-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.plan-for-me-btn[title] {
+    position: relative;
+}
+
+/* Tooltip styles */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    padding: 5px 8px;
+    position: absolute;
+    z-index: 1001;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    font-size: 12px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #333 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Toast Notifications */
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 16px 24px;
+    border-radius: 12px;
+    color: white;
+    font-weight: 500;
+    font-size: 14px;
+    max-width: 400px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    z-index: 10000;
+    transform: translateX(400px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.toast.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.toast-success {
+    background: rgba(34, 197, 94, 0.9);
+    box-shadow: 0 8px 24px rgba(34, 197, 94, 0.3);
+}
+
+.toast-error {
+    background: rgba(239, 68, 68, 0.9);
+    box-shadow: 0 8px 24px rgba(239, 68, 68, 0.3);
+}
+
+.toast-info {
+    background: rgba(59, 130, 246, 0.9);
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+}
+
+.toast-warning {
+    background: rgba(245, 158, 11, 0.9);
+    color: #1f2937;
+    box-shadow: 0 8px 24px rgba(245, 158, 11, 0.3);
+}
+
+/* Planning State */
+.task-item.planning {
+    background: rgba(102, 126, 234, 0.15);
+    backdrop-filter: blur(10px);
+    border-left: 4px solid #667eea;
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.2);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { 
+        box-shadow: 0 4px 20px rgba(102, 126, 234, 0.2);
+    }
+    50% { 
+        box-shadow: 0 8px 30px rgba(102, 126, 234, 0.4);
+    }
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Subtask URLs */
+.subtask-url {
+    color: #667eea;
+    text-decoration: none;
+    margin-left: 12px;
+    font-size: 16px;
+    opacity: 0.7;
+    transition: all 0.2s ease;
+    padding: 4px 6px;
+    border-radius: 6px;
+    position: relative;
+    cursor: pointer;
+}
+
+.subtask-url:hover {
+    opacity: 1;
+    background: rgba(102, 126, 234, 0.1);
+    transform: scale(1.1);
+}
+
+/* Tooltip for subtask URLs */
+.subtask-url::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(45, 55, 72, 0.95);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    pointer-events: none;
+    margin-bottom: 8px;
+}
+
+.subtask-url:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Enhanced Plan for Me button */
+.plan-for-me-btn:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.plan-for-me-btn:disabled:hover {
+    background-color: #6c757d;
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+    .app-layout {
+        flex-direction: column;
+    }
+    
+    .resources-pane {
+        width: 100%;
+        height: 50vh;
+        top: auto;
+        bottom: 0;
+        transform: translateY(100%);
+        border-left: none;
+        border-top: 2px solid #e0e0e0;
+    }
+    
+    .resources-pane.open {
+        transform: translateY(0);
+    }
+    
+    .main-content.with-resources {
+        margin-right: 0;
+        margin-bottom: 50vh;
+    }
+    
+    .toast {
+        right: 10px;
+        left: 10px;
+        max-width: none;
+        transform: translateY(-100px);
+    }
+    
+    .toast.show {
+        transform: translateY(0);
+    }
+}
