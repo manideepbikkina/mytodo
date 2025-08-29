@@ -2,6 +2,7 @@
 
 const STORAGE_KEY = 'todo.v1';
 const SETTINGS_KEY = 'todo.v1.settings';
+const PERSONALIZATION_KEY = 'todo.v1.personalization';
 
 // SubTask: { id: string, title: string, done: boolean }
 // Task:    { id: string, title: string, done: boolean, subtasks: SubTask[] }
@@ -84,5 +85,32 @@ const Storage = {
                  settings.apiKey && 
                  settings.deployment && 
                  settings.apiVersion);
+    },
+
+    // Load personalization data from localStorage
+    loadPersonalization() {
+        try {
+            const data = localStorage.getItem(PERSONALIZATION_KEY);
+            return data ? JSON.parse(data) : {};
+        } catch (error) {
+            console.error('Error loading personalization from storage:', error);
+            return {};
+        }
+    },
+
+    // Save personalization data to localStorage
+    savePersonalization(personalization) {
+        try {
+            localStorage.setItem(PERSONALIZATION_KEY, JSON.stringify(personalization));
+        } catch (error) {
+            console.error('Error saving personalization to storage:', error);
+        }
+    },
+
+    // Check if personalization data exists
+    hasPersonalization() {
+        const personalization = this.loadPersonalization();
+        return !!(personalization.interests || personalization.location || 
+                 personalization.workStyle || personalization.planningStyle);
     }
 };

@@ -27,6 +27,10 @@
                     </div>
                     
                     <div class="api-section">
+                        <button id="personalize-btn" class="api-btn">
+                            <span class="person-icon">👤</span>
+                            Personalize
+                        </button>
                         <button id="settings-btn" class="api-btn">
                             <span class="gear-icon">⚙</span>
                             Settings
@@ -101,7 +105,82 @@
         </div>
     </div>
 
-    <script src="storage.js"></script>
+    <!-- Personalization Modal -->
+    <div id="personalization-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🎯 Personalize Your Experience</h2>
+                <button class="close-btn" id="close-personalization-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="personalization-form">
+                    <div class="form-section">
+                        <h3>About You</h3>
+                        
+                        <div class="form-group">
+                            <label for="interests">Interests & Expertise:</label>
+                            <input type="text" id="interests" name="interests" 
+                                   placeholder="Eg: Tech, Shopping, AI and Machine Learning">
+                            <small>What topics do you work with or are passionate about?</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="location">Location:</label>
+                            <input type="text" id="location" name="location" 
+                                   placeholder="Eg: Hyderabad, India">
+                            <small>Your city/country for location-specific suggestions</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="work-style">Work Style & Preferences:</label>
+                            <textarea id="work-style" name="workStyle" rows="3" 
+                                      placeholder="Eg: Analytical, Like things in MECE format, Like to have fun, Have 7 year old daughter"></textarea>
+                            <small>How do you like to work? Any personal context that helps with planning?</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="role-context">Professional Role:</label>
+                            <input type="text" id="role-context" name="roleContext" 
+                                   placeholder="Eg: Product Manager, Software Engineer, Student">
+                            <small>Your current role or profession</small>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h3>Smart Planning Preferences</h3>
+                        
+                        <div class="form-group">
+                            <label for="planning-style">Task Breakdown Style:</label>
+                            <textarea id="planning-style" name="planningStyle" rows="3" 
+                                      placeholder="Eg: Only have 3-4 sub-tasks, keep them crisp, give more links when possible"></textarea>
+                            <small>How would you like AI to break down your tasks?</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="time-preference">Time Management:</label>
+                            <input type="text" id="time-preference" name="timePreference" 
+                                   placeholder="Eg: Prefer morning tasks, Work in 2-hour blocks, Need evening family time">
+                            <small>Any time-related preferences for task planning?</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="resource-preference">Resource Preferences:</label>
+                            <input type="text" id="resource-preference" name="resourcePreference" 
+                                   placeholder="Eg: Prefer video tutorials, Like detailed documentation, Quick reference guides">
+                            <small>What type of learning resources do you prefer?</small>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="save-btn">Save Personalization</button>
+                        <button type="button" id="reset-personalization" class="reset-btn">Reset to Defaults</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="storage.js"></script></script>
     <script src="ai.js"></script>
     <script src="app.js"></script>
 </body>

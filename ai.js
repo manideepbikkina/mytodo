@@ -166,15 +166,55 @@ const AI = {
         const url = `${baseUrl}/openai/deployments/${deployment}/chat/completions?api-version=${apiVersion}`;
         console.log('generateSubtasks URL:', url);
 
+        // Get personalization data
+        const personalization = Storage.loadPersonalization();
+        
+        // Build personalized system prompt
+        let systemPrompt = 'You must respond with valid JSON only. No explanations, no markdown, no extra text. Format: {"taskEmoticon":"📋","subtasks":[{"emoticon":"📱","title":"task description","url":"https://example.com"}],"resources":[{"title":"resource name","url":"https://example.com"}]}. Each subtask title must be under 60 characters and actionable. Include relevant emoticons for the main task and each subtask.';
+        
+        if (personalization.planningStyle) {
+            systemPrompt += ` Task breakdown style: ${personalization.planningStyle}`;
+        }
+        if (personalization.resourcePreference) {
+            systemPrompt += ` Resource preference: ${personalization.resourcePreference}`;
+        }
+        
+        // Build personalized user prompt
+        let userPrompt = `Break down "${taskTitle}" into 3-6 specific, actionable subtasks.`;
+        
+        // Add personalization context
+        let personalContext = '';
+        if (personalization.interests) {
+            personalContext += ` User interests: ${personalization.interests}.`;
+        }
+        if (personalization.location) {
+            personalContext += ` Location: ${personalization.location}.`;
+        }
+        if (personalization.roleContext) {
+            personalContext += ` Professional role: ${personalization.roleContext}.`;
+        }
+        if (personalization.workStyle) {
+            personalContext += ` Work style: ${personalization.workStyle}.`;
+        }
+        if (personalization.timePreference) {
+            personalContext += ` Time preferences: ${personalization.timePreference}.`;
+        }
+        
+        if (personalContext) {
+            userPrompt += ` Consider this personal context:${personalContext}`;
+        }
+        
+        userPrompt += ` For each subtask, include a relevant emoticon, the task description, and a helpful web URL when relevant. Also provide a relevant emoticon for the main task "${taskTitle}" and suggest 1-3 general web resources. Return only valid JSON in the specified format.`;
+
         const requestBody = {
             messages: [
                 {
                     role: 'system',
-                    content: 'You must respond with valid JSON only. No explanations, no markdown, no extra text. Format: {"taskEmoticon":"📋","subtasks":[{"emoticon":"📱","title":"task description","url":"https://example.com"}],"resources":[{"title":"resource name","url":"https://example.com"}]}. Each subtask title must be under 60 characters and actionable. Include relevant emoticons for the main task and each subtask.'
+                    content: systemPrompt
                 },
                 {
                     role: 'user',
-                    content: `Break down "${taskTitle}" into 3-6 specific, actionable subtasks. For each subtask, include a relevant emoticon, the task description, and a helpful web URL when relevant. Also provide a relevant emoticon for the main task "${taskTitle}" and suggest 1-3 general web resources. Return only valid JSON in the specified format.`
+                    content: userPrompt
                 }
             ],
             max_tokens: 500,

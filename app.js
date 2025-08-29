@@ -15,25 +15,41 @@ function init() {
 function setupEventListeners() {
     const addTaskBtn = document.getElementById('add-task-btn');
     const settingsBtn = document.getElementById('settings-btn');
+    const personalizeBtn = document.getElementById('personalize-btn');
     const modal = document.getElementById('settings-modal');
+    const personalizationModal = document.getElementById('personalization-modal');
     const closeModalBtn = document.getElementById('close-modal');
+    const closePersonalizationModalBtn = document.getElementById('close-personalization-modal');
     const settingsForm = document.getElementById('settings-form');
+    const personalizationForm = document.getElementById('personalization-form');
     const testConnectionBtn = document.getElementById('test-connection');
     const togglePasswordBtn = document.getElementById('toggle-password');
     const closeResourcesBtn = document.getElementById('close-resources');
+    const resetPersonalizationBtn = document.getElementById('reset-personalization');
     
     addTaskBtn.addEventListener('click', addNewTask);
     settingsBtn.addEventListener('click', openSettingsModal);
+    personalizeBtn.addEventListener('click', openPersonalizationModal);
     closeModalBtn.addEventListener('click', closeSettingsModal);
+    closePersonalizationModalBtn.addEventListener('click', closePersonalizationModal);
     settingsForm.addEventListener('submit', saveSettings);
+    personalizationForm.addEventListener('submit', savePersonalization);
     testConnectionBtn.addEventListener('click', testConnection);
     togglePasswordBtn.addEventListener('click', togglePasswordVisibility);
     closeResourcesBtn.addEventListener('click', hideResourcesPane);
+    resetPersonalizationBtn.addEventListener('click', resetPersonalization);
     
     // Close modal when clicking outside
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
             closeSettingsModal();
+        }
+    });
+    
+    // Close personalization modal when clicking outside
+    personalizationModal.addEventListener('click', (e) => {
+        if (e.target === personalizationModal) {
+            closePersonalizationModal();
         }
     });
     
@@ -50,8 +66,11 @@ function handleGlobalKeydown(e) {
             cancelEdit();
         } else {
             const resourcesPane = document.getElementById('resources-pane');
+            const personalizationModal = document.getElementById('personalization-modal');
             if (resourcesPane.classList.contains('open')) {
                 hideResourcesPane();
+            } else if (personalizationModal.classList.contains('show')) {
+                closePersonalizationModal();
             } else {
                 closeSettingsModal();
             }
@@ -487,6 +506,65 @@ function showConnectionStatus(message, type) {
     const statusDiv = document.getElementById('connection-status');
     statusDiv.className = `connection-status ${type}`;
     statusDiv.textContent = message;
+}
+
+// Personalization Modal Functions
+function openPersonalizationModal() {
+    const modal = document.getElementById('personalization-modal');
+    const form = document.getElementById('personalization-form');
+    
+    // Load current personalization
+    const personalization = Storage.loadPersonalization();
+    form.elements.interests.value = personalization.interests || '';
+    form.elements.location.value = personalization.location || '';
+    form.elements.workStyle.value = personalization.workStyle || '';
+    form.elements.roleContext.value = personalization.roleContext || '';
+    form.elements.planningStyle.value = personalization.planningStyle || '';
+    form.elements.timePreference.value = personalization.timePreference || '';
+    form.elements.resourcePreference.value = personalization.resourcePreference || '';
+    
+    modal.classList.add('show');
+    form.elements.interests.focus();
+}
+
+function closePersonalizationModal() {
+    const modal = document.getElementById('personalization-modal');
+    modal.classList.remove('show');
+}
+
+function savePersonalization(e) {
+    e.preventDefault();
+    
+    const form = e.target;
+    const formData = new FormData(form);
+    const personalization = {
+        interests: formData.get('interests').trim(),
+        location: formData.get('location').trim(),
+        workStyle: formData.get('workStyle').trim(),
+        roleContext: formData.get('roleContext').trim(),
+        planningStyle: formData.get('planningStyle').trim(),
+        timePreference: formData.get('timePreference').trim(),
+        resourcePreference: formData.get('resourcePreference').trim()
+    };
+    
+    Storage.savePersonalization(personalization);
+    showToast('Personalization saved successfully! Your AI planning is now customized.', 'success');
+    
+    setTimeout(() => {
+        closePersonalizationModal();
+    }, 1500);
+}
+
+function resetPersonalization() {
+    if (confirm('Are you sure you want to reset all personalization settings? This cannot be undone.')) {
+        Storage.savePersonalization({});
+        
+        // Clear form fields
+        const form = document.getElementById('personalization-form');
+        form.reset();
+        
+        showToast('Personalization settings have been reset to defaults.', 'success');
+    }
 }
 
 function updatePlanForMeButtons() {
