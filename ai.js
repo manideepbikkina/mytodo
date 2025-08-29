@@ -170,11 +170,11 @@ const AI = {
             messages: [
                 {
                     role: 'system',
-                    content: 'You must respond with valid JSON only. No explanations, no markdown, no extra text. Format: {"subtasks":[{"title":"task description","url":"https://example.com"}],"resources":[{"title":"resource name","url":"https://example.com"}]}. Each subtask title must be under 60 characters and actionable.'
+                    content: 'You must respond with valid JSON only. No explanations, no markdown, no extra text. Format: {"taskEmoticon":"📋","subtasks":[{"emoticon":"📱","title":"task description","url":"https://example.com"}],"resources":[{"title":"resource name","url":"https://example.com"}]}. Each subtask title must be under 60 characters and actionable. Include relevant emoticons for the main task and each subtask.'
                 },
                 {
                     role: 'user',
-                    content: `Break down "${taskTitle}" into 3-6 specific, actionable subtasks. For each subtask, include a helpful web URL (tutorial, guide, tool, or resource) when relevant. Also suggest 1-3 general web resources for this overall task. Return only valid JSON in the specified format.`
+                    content: `Break down "${taskTitle}" into 3-6 specific, actionable subtasks. For each subtask, include a relevant emoticon, the task description, and a helpful web URL when relevant. Also provide a relevant emoticon for the main task "${taskTitle}" and suggest 1-3 general web resources. Return only valid JSON in the specified format.`
                 }
             ],
             max_tokens: 500,
@@ -240,7 +240,8 @@ const AI = {
                 
                 return {
                     subtasks: subtaskTitles.slice(0, 6).map(title => Storage.createSubTask(title)),
-                    resources: []
+                    resources: [],
+                    taskEmoticon: ''
                 };
             }
 
@@ -268,11 +269,13 @@ const AI = {
                 if (typeof item === 'string') {
                     return Storage.createSubTask(item);
                 } else if (item && typeof item === 'object') {
-                    // Handle object format with title and url
+                    // Handle object format with emoticon, title and url
+                    const emoticon = item.emoticon || '';
                     const title = item.title || item.name || String(item);
+                    const fullTitle = emoticon ? `${emoticon} ${title}` : title;
                     const url = item.url || null;
-                    console.log('Creating subtask with title:', title, 'and url:', url);
-                    return Storage.createSubTask(title, url);
+                    console.log('Creating subtask with emoticon:', emoticon, 'title:', title, 'and url:', url);
+                    return Storage.createSubTask(fullTitle, url);
                 } else {
                     // Fallback for unexpected formats
                     console.warn('Unexpected item format:', item);
@@ -283,8 +286,9 @@ const AI = {
             console.log('Final subtasks created:', subtasks);
 
             const resources = parsedResponse.resources || [];
+            const taskEmoticon = parsedResponse.taskEmoticon || '';
 
-            return { subtasks, resources };
+            return { subtasks, resources, taskEmoticon };
 
         } catch (error) {
             console.error('Error generating subtasks:', error);

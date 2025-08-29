@@ -267,6 +267,11 @@ async function planForMe(taskId) {
         // Call the AI service
         const result = await AI.planSubtasks(Storage.loadSettings(), task.title, controller.signal);
         
+        // Add emoticon to main task if provided
+        if (result.taskEmoticon && !task.title.match(/^[\p{Emoji_Presentation}\p{Extended_Pictographic}]/u)) {
+            task.title = `${result.taskEmoticon} ${task.title}`;
+        }
+        
         // Merge new subtasks with existing ones (case-insensitive dedupe)
         const existingTitles = new Set(task.subtasks.map(st => st.title.toLowerCase()));
         const newSubtasks = result.subtasks.filter(st => 
