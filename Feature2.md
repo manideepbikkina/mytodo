@@ -4,15 +4,15 @@
 
 Inputs
 
-- apiBaseUrl (e.g., https://<resource>.openai.azure.com)
+- Full Model End point URL (not just base URL) eg: https://<yourproject>.cognitiveservices.azure.com/openai/deployments/gpt-4o-mini/chat/completions?api-version=2025-01-01-preview
 
 - apiKey (password input with show/hide)
 
-- deployment (e.g., gpt-4o-mini)
 
-- apiVersion (text, default to a sensible version)
 
 Storage
+
+- Extract other required fields from the full URL: like deployment (e.g., gpt-4o-mini), apiVersion
 
 - Save to localStorage under todo.v1.settings as a JSON object.
 
